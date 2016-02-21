@@ -1,30 +1,5 @@
 module.exports = function()
 {
-	function population(cellState, numberOfLiveNeighbours)
-	{
-		if (cellState == 0 && numberOfLiveNeighbours <= 2)
-		{
-			return 0;
-		}
-
-		if (cellState == 1 && numberOfLiveNeighbours < 2)
-		{
-			return 0;
-		}
-
-		if (cellState == 1 && numberOfLiveNeighbours > 3)
-		{
-			return 0;
-		}
-
-		if (cellState == 0 && numberOfLiveNeighbours == 3)
-		{
-			return 1;
-		}
-
-		return 1;
-	}
-
 	function evolve(gridState)
 	{
 		var newState = [
@@ -50,7 +25,6 @@ module.exports = function()
 	}
 
 	return {
-		population: population,
 		evolve: evolve
 	};
 };

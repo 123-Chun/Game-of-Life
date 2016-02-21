@@ -167,27 +167,27 @@
 	{
 		function population(cellState, numberOfLiveNeighbours)
 		{
-			if (cellState == 0 && numberOfLiveNeighbours <= 2)
+			if (cellState == 0)
 			{
+				if ( numberOfLiveNeighbours == 3 )
+				{
+					return 1;
+				}
+
 				return 0;
 			}
 
-			if (cellState == 1 && numberOfLiveNeighbours < 2)
+			if (cellState == 1)
 			{
-				return 0;
-			}
+				if ( numberOfLiveNeighbours < 2 || numberOfLiveNeighbours > 3)
+				{
+					return 0;
+				}
 
-			if (cellState == 1 && numberOfLiveNeighbours > 3)
-			{
-				return 0;
-			}
-
-			if (cellState == 0 && numberOfLiveNeighbours == 3)
-			{
 				return 1;
 			}
 
-			return 1;
+			return 0;
 		}
 
 		function evolve(gridState)
