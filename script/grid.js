@@ -1,5 +1,7 @@
-function Grid()
-{
+module.exports = function Grid(){
+	
+	var Cell = require('./Cell.js')	;
+
 	this.liveCells = [];
 	this.grid = [];
 	this.newGrid = [];
@@ -20,19 +22,15 @@ function Grid()
 
 			for (var y = 0; y < this.gridSize; y++)
 			{
-				// console.log(x+","+y)
-				// this.grid[x][y] = {CellPosition: "["+x+"]["+y+"]", CellState: 0};
-				// var cell = new Cell();
 				var rand = Math.floor(Math.random() * 4) + 1;
 				if (rand > 2)
 				{
-					this.grid[x][y] = 0;
+					this.grid[x][y] = new Cell().setState(0);
 				}
 				else
 				{
-					this.grid[x][y] = 1;
-					var cellPosition = [x,y];
-					this.liveCells.push(cellPosition);
+					this.grid[x][y] = new Cell().setState(1);
+					this.liveCells.push([x,y]);
 				};
 			};
 		}
@@ -44,9 +42,17 @@ function Grid()
 	 */
 	this.setState = function(gridState)
 	{
+		for (var x = 0; x < gridState.length; x++) {
+			for (var y = 0; y < gridState.length; y++) {
+				var state = gridState[x][y];
+				gridState[x][y] = new Cell();
+				gridState[x][y].setState(state);
+			};
+		};
+
 		this.grid = gridState;
 		this.gridSize = gridState.length;
-		this.checkLiveCells();
+		this.findLiveCells();
 	}
 
 	/**
@@ -61,47 +67,64 @@ function Grid()
 		    return arr.slice();
 		});
 
-		if (this.liveCells.length > 2)
-		{
-			for ( var x = 0; x < this.gridSize; x++)
-			{
-				for (var y = 0; y < this.gridSize; y++)
-				{
-					// var cell = this.grid[x][y];
-					var liveNeighbours = this.checkNeighbours(x,y);
-					var newState = this.newCellState(this.grid[x][y], liveNeighbours);
-					this.newGrid[x][y] = newState;
-				};
-			}
+		if (this.liveCells.length > 2) {
+			
+			this.updateAllCellStates(true);
 		}
-		else
-		{
-			for (var i = 0; i < this.liveCells.length; i++)
-			{
-				var x = this.liveCells[i][0];
-				var y = this.liveCells[i][1];
-				// console.log(x+","+y)
-				var liveNeighbours = this.checkNeighbours(x,y);
+		else {
+			
+			this.updateLiveCellsOnly();
+		}
 
-				var newState = this.newCellState(this.grid[x][y], liveNeighbours);
-				this.newGrid[x][y] = newState;
-			};
-		};
+		this.updateAllCellStates(false);
+
 		this.grid = this.newGrid.slice(0);
 		console.log("New State:");
+	}
+
+	this.updateAllCellStates = function(state){
+
+		for ( var x = 0; x < this.gridSize; x++)
+		{
+			for (var y = 0; y < this.gridSize; y++)
+			{
+				var cell = this.newGrid[x][y];
+				if (state == true) {
+					var liveNeighbours = this.checkNeighbours(x,y);
+					cell.updateNewState(liveNeighbours);
+				}else{
+					cell.updateState();
+				};
+			};
+		}
+	}
+
+	this.updateLiveCellsOnly = function() {
+
+		for (var i = 0; i < this.liveCells.length; i++)
+		{
+			var x = this.liveCells[i][0];
+			var y = this.liveCells[i][1];
+			// console.log(x+","+y)
+			var cell = this.newGrid[x][y];
+
+			var liveNeighbours = this.checkNeighbours(x,y);
+
+			cell.updateNewState(liveNeighbours);
+		};
 	}
 
 	/**
 	 * Checks for all the live cells on the grid
 	 * @return {int} number of live cells on grid
 	 */
-	this.checkLiveCells = function()
-	{
+	this.findLiveCells = function() {
+
 		for ( var x = 0; x < this.gridSize; x++)
 		{
 			for (var y = 0; y < this.gridSize; y++)
 			{
-				var cell = this.grid[x][y];
+				var cell = this.grid[x][y].getState();
 				if (cell == 1)
 				{
 					this.liveCells.push([x,y]);
@@ -116,8 +139,8 @@ function Grid()
 	 * @param  {int} y position
 	 * @return {int}   number of cells alive around this cell
 	 */
-	this.checkNeighbours = function(x,y)
-	{
+	this.checkNeighbours = function(x,y) {
+
 		var liveNeighbours = 0;
 
 		liveNeighbours = liveNeighbours + this.getCellState(x-1,y-1);
@@ -135,19 +158,19 @@ function Grid()
 	}
 
 	/**
-	 * Get cell state
+	 * Gets state of specified cell
 	 * @param  {int} x [description]
 	 * @param  {int} y [description]
 	 * @return {int}   [description]
 	 */
-	this.getCellState = function(x,y)
-	{
-		if (x >= 0 && y >= 0)
-		{
-			if (x < this.gridSize && y < this.gridSize)
-			{
-				// console.log(x+","+y+" = "+this.grid[x][y])
-				return this.grid[x][y];
+	this.getCellState = function(x,y) {
+
+		if (x >= 0 && y >= 0) {
+
+			if (x < this.gridSize && y < this.gridSize) {
+				
+				// console.log(x+","+y+" = "+this.grid[x][y].currentState)
+				return this.grid[x][y].getState();
 			};
 		};
 
@@ -155,62 +178,21 @@ function Grid()
 	}
 
 	/**
-	 * Gets cell's new state
-	 * @param  {[type]} currentState          [description]
-	 * @param  {[type]} currentLiveNeighbours [description]
-	 * @return {[type]}                       [description]
-	 */
-	this.newCellState = function(currentState, currentLiveNeighbours)
-	{
-		if (currentState == 0)
-		{
-			if ( currentLiveNeighbours == 3 )
-			{
-				return 1;
-			}
-
-			return 0;
-		}
-
-		if (currentState == 1)
-		{
-			if ( currentLiveNeighbours < 2 || currentLiveNeighbours > 3)
-			{
-				return 0;
-			}
-
-			return 1;
-		}
-
-		return 0;
-	}
-
-	/**
 	 * Prints each line of the grid
-	 * @return {[type]} [description]
 	 */
-	this.printGrid = function()
-	{
-		this.grid.forEach(function(xElement,xIndex,xArray)
-		{
-			console.log(xElement);
-		});
+	this.printGrid = function() {
+
+		for (var x = 0; x < this.grid.length; x++) {
+			
+			var row = [];
+
+			for (var y = 0; y < this.grid.length; y++) {
+			
+				row.push(this.grid[x][y].newState);
+			
+			};
+
+			console.log(row);
+		};
 	}
 };
-
-var initialState = [
-			[0,0,0],
-			[0,1,0],
-			[0,0,0]
-		];
-var grid = new Grid();
-
-// grid.drawGrid(3);
-grid.setState(initialState);
-// console.log(grid);
-grid.printGrid();
-grid.updateState();
-grid.printGrid();
-grid.updateState();
-grid.printGrid();
-

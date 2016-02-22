@@ -1,30 +1,21 @@
-module.exports = function()
-{
-	function evolve(gridState)
-	{
-		var newState = [
-				[0,0,0],
-				[0,0,0],
-				[0,0,0]
-			];
+var Grid = require('./Grid.js');
 
-		if ( gridState == [
-			[0,0,0],
+var initialState = [
 			[0,1,0],
-			[0,0,0]
-		])
-		{
-			newState = [
-				[0,0,0],
-				[0,0,0],
-				[0,0,0]
-			];
-		};
+			[1,1,1],
+			[0,1,0]
+		];
 
-		return newState;
-	}
+var grid = new Grid();
 
-	return {
-		evolve: evolve
-	};
-};
+// grid.drawGrid(3);
+grid.setState(initialState);
+// console.log(grid);
+grid.printGrid();
+grid.updateState();
+grid.printGrid();
+grid.updateState();
+grid.printGrid();
+grid.updateState();
+grid.printGrid();
+
