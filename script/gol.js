@@ -10,7 +10,7 @@ var grid = new Grid();
 
 // grid.drawGrid(3);
 grid.setState(initialState);
-// console.log(grid);
+// console.log(grid.getGrid());
 grid.printGrid();
 grid.updateState();
 grid.printGrid();

@@ -55,6 +55,24 @@ module.exports = function Grid(){
 		this.findLiveCells();
 	}
 
+	this.getGrid = function() {
+		var plainGrid = [];
+
+		for (var x = 0; x < this.grid.length; x++) {
+			
+			plainGrid[x] = [];
+
+			for (var y = 0; y < this.grid.length; y++) {
+			
+				plainGrid[x].push(this.grid[x][y].newState);
+			
+			};
+
+		};
+
+		return plainGrid;
+	}
+
 	/**
 	 * Updates the state of the grid
 	 * @return {[type]} [description]
@@ -168,7 +186,7 @@ module.exports = function Grid(){
 		if (x >= 0 && y >= 0) {
 
 			if (x < this.gridSize && y < this.gridSize) {
-				
+
 				// console.log(x+","+y+" = "+this.grid[x][y].currentState)
 				return this.grid[x][y].getState();
 			};

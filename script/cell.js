@@ -14,6 +14,11 @@ module.exports = function Cell(){
 		this.newState = initialState;
 	}
 
+	this.setLiveNeighbours = function(neighbours){
+		
+		this.currentLiveNeighbours = neighbours;
+	}
+
 	this.getState = function () {
 		return this.currentState;
 	}
@@ -25,13 +30,8 @@ module.exports = function Cell(){
 	 * @return {int} updated state of object
 	 */
 	this.getNewState = function(cellState, numberOfLiveNeighbours){
-		
-		this.currentState = cellState;
-		this.currentLiveNeighbours = numberOfLiveNeighbours;
 
-		newState = this.newCellState();
-
-		return newState;
+		return this.newState;
 	}
 
 	this.updateNewState = function(numberOfLiveNeighbours){
