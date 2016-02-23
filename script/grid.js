@@ -8,10 +8,8 @@ module.exports = function Grid(){
 
 	/**
 	 * Draws grid
-	 * @param  {[type]} gridSize [description]
-	 * @return {[type]}          [description]
 	 */
-	this.drawGrid = function(gridSize)
+	this.draw = function(gridSize)
 	{
 		this.gridSize = gridSize;
 
@@ -39,7 +37,6 @@ module.exports = function Grid(){
 
 	/**
 	 * Sets grid state
-	 * @param {[type]} gridState [description]
 	 */
 	this.setState = function(gridState)
 	{
@@ -56,6 +53,9 @@ module.exports = function Grid(){
 		this.findLiveCells();
 	}
 
+	/**
+	 * Returns grid in integer format
+	 */
 	this.getGrid = function() {
 		var plainGrid = [];
 
@@ -77,14 +77,7 @@ module.exports = function Grid(){
 	/**
 	 * Updates the state of the grid
 	 */
-	this.updateState = function()
-	{
-		
-		// Copy grid without references:
-		// this.newGrid = this.grid.map(function(arr) {
-		    // return arr.slice();
-		// });
-
+	this.update = function() {
 		if (this.liveCells.length > 2) {
 			this.updateAllCellStates(true);
 		}
@@ -95,12 +88,11 @@ module.exports = function Grid(){
 		//Update the current state of all cells
 		this.updateAllCellStates(false);
 
-		// this.grid = this.newGrid.slice(0);
 		console.log("New State:");
 	}
 
 	/**
-	 * Update all cell in this grid
+	 * Update all cells in this grid
 	 */
 	this.updateAllCellStates = function(state){
 
@@ -111,7 +103,7 @@ module.exports = function Grid(){
 				if (state == true) {
 					this.updateCellState(x,y);
 				}else{
-					this.grid[x][y].updateState();
+					this.grid[x][y].updateCurrentState();
 				};
 			};
 		}
@@ -141,8 +133,9 @@ module.exports = function Grid(){
 		cell.updateNewState(liveNeighbours);
 		// console.log(cell.getNewState());
 	}
+
 	/**
-	 * Checks for all the live cells on the grid
+	 * Finds for all the live cells on the grid
 	 * @return {int} number of live cells on grid
 	 */
 	this.findLiveCells = function() {
@@ -162,8 +155,6 @@ module.exports = function Grid(){
 
 	/**
 	 * Checks if surrounding cells are alive
-	 * @param  {int} x position
-	 * @param  {int} y position
 	 * @return {int}   number of cells alive around this cell
 	 */
 	this.checkNeighbours = function(x,y) {
@@ -186,9 +177,7 @@ module.exports = function Grid(){
 
 	/**
 	 * Gets state of specified cell
-	 * @param  {int} x [description]
-	 * @param  {int} y [description]
-	 * @return {int}   [description]
+	 * @return {int}   [State of specified cell]
 	 */
 	this.getCellState = function(x,y) {
 
@@ -207,7 +196,7 @@ module.exports = function Grid(){
 	/**
 	 * Prints each line of the grid
 	 */
-	this.printGrid = function() {
+	this.print = function() {
 
 		for (var x = 0; x < this.grid.length; x++) {
 			

@@ -116,7 +116,7 @@ describe('Scenario 6: Expected game outcome for seeded grid', function (){
 		];
 
 		grid.setState(initialState);
-		grid.updateState()
+		grid.update()
 		expect(grid.getGrid()).toEqual(resultState);
 	});
 });
@@ -139,7 +139,7 @@ describe('Game', function (){
 		];
 
 		grid.setState(initialState);
-		grid.updateState()
+		grid.update()
 		expect(grid.getGrid()).toEqual(resultState);
 	});
 });

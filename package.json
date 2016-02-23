@@ -11,6 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.11.1",
+    "browserify": "^13.0.0",
     "gulp": "^3.9.1",
     "jasmine": "^2.3.1",
     "jasmine-core": "^2.4.1",

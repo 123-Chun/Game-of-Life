@@ -2,6 +2,7 @@
 var gulp  = require('gulp');
 var browserSync = require('browser-sync').create();
 var reload      = browserSync.reload;
+var browserify = require('browserify');
 
 gulp.task('default', ['watch']);
 
@@ -15,3 +16,8 @@ gulp.task('watch', function() {
 	gulp.watch("index.html").on("change", reload);
 
 });
+
+gulp.task('browserify', function() {
+
+	browserify('script/grid.js','js/');
+})
