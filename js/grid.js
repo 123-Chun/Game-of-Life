@@ -1,3 +1,94 @@
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.grid = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = function Cell(){
+	
+	this.currentState = 0;
+	this.newState = 0;
+	this.currentLiveNeighbours = 0;
+
+	/**
+	 * Sets the state of the cell
+	 * @param {int} initialState 0 = dead, 1= alive
+	 */
+	this.setState = function(initialState){
+		
+		this.currentState = initialState;
+		this.newState = initialState;
+	}
+
+	/**
+	 * Set number of live neighbours
+	 */
+	this.setLiveNeighbours = function(neighbours){
+		
+		this.currentLiveNeighbours = neighbours;
+	}
+
+	/**
+	 * Returns current state of cell
+	 */
+	this.getState = function () {
+		return this.currentState;
+	}
+
+	/**
+	 * Returns new state of cell
+	 */
+	this.getNewState = function(){
+
+		return this.newState;
+	}
+
+	/**
+	 * Updates new state
+	 */
+	this.updateNewState = function(numberOfLiveNeighbours){
+		
+		this.currentLiveNeighbours = numberOfLiveNeighbours;
+
+		newState = this.newCellState();
+
+		// console.log(numberOfLiveNeighbours);
+		this.newState = newState;
+	}
+
+	/**
+	 * Updates current state 
+	 */
+	this.updateCurrentState = function(){
+		// console.log("Cell Updated");
+		this.currentState = this.newState;
+	}
+
+	/**
+	 * Calculates the new state of the cell depending number of live neighbouring cells
+	 * @return {int} 0 = dead, 1 = alive
+	 */
+	this.newCellState = function()
+	{
+		if (this.currentState == 0)
+		{
+			if ( this.currentLiveNeighbours == 3 )
+			{
+				return 1;
+			}
+
+			return 0;
+		}
+
+		if (this.currentState == 1)
+		{
+			if ( this.currentLiveNeighbours < 2 || this.currentLiveNeighbours > 3)
+			{
+				return 0;
+			}
+
+			return 1;
+		}
+
+		return 0;
+	}
+};
+},{}],2:[function(require,module,exports){
 var Cell = require('./Cell.js')	;
 
 module.exports = function Grid(){	
@@ -212,3 +303,5 @@ module.exports = function Grid(){
 		};
 	}
 };
+},{"./Cell.js":1}]},{},[2])(2)
+});

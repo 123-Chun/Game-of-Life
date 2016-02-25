@@ -4,12 +4,12 @@
 	<meta charset="UTF-8">
 	<title>Game of Life</title>
 	<!-- Latest compiled and minified CSS & JS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<script src="//code.jquery.com/jquery.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<!-- <script src="//code.jquery.com/jquery.js"></script> -->
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
 	<script src="js/jquery-2.2.1.min.js"></script>
+	<script src="js/bundle.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -22,6 +22,10 @@
 					<li>
 						<a href="_specRunner.html">_specRunner</a>
 					</li>
+					<li>
+						Download local bootstrap
+					</li>
+					<li>Look at how to call function within bundle.js</li>
 				</ul>
 				<div class="grid"></div>
 				<script type="text/javascript">
@@ -44,7 +48,39 @@
 					        }
 					    }
 					}
-					createGrid(25);
+					// createGrid(25);
+				</script>
+				<script >
+					function createTable(tableData) {
+					  var table = document.createElement('table');
+					  var tableBody = document.createElement('tbody');
+
+					  tableData.forEach(function(rowData) {
+					    var row = document.createElement('tr');
+
+					    rowData.forEach(function(cellData) {
+					      var cell = document.createElement('td');
+					      cell.appendChild(document.createTextNode(cellData));
+					      row.appendChild(cell);
+					    });
+
+					    tableBody.appendChild(row);
+					  });
+
+					  table.appendChild(tableBody);
+					  document.body.appendChild(table);
+					}
+					var initialState = [
+								[0,1,0],
+								[0,1,0],
+								[0,1,0]
+							];
+					createTable(initialState);
+
+					var grid = new Grid();
+
+					// grid.setState(initialState);
+					grid.draw(6);
 				</script>
 			</div>
 		</div>
