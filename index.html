@@ -4,7 +4,8 @@
 	<meta charset="UTF-8">
 	<title>Game of Life</title>
 	<!-- Latest compiled and minified CSS & JS -->
-	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<!-- <script src="//code.jquery.com/jquery.js"></script> -->
 	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
@@ -27,32 +28,11 @@
 					</li>
 					<li>Look at how to call function within bundle.js</li>
 				</ul>
-				<div class="grid"></div>
-				<script type="text/javascript">
-					function createGrid(size) {
-					    var ratioW = Math.floor($(window).width()/size),
-					        ratioH = Math.floor($(window).height()/size);
-
-					    var parent = $('<div />', {
-					        class: 'grid',
-					        width: ratioW  * size,
-					        height: ratioH  * size
-					    }).addClass('grid').appendTo('body');
-
-					    for (var i = 0; i < ratioH; i++) {
-					        for(var p = 0; p < ratioW; p++){
-					            $('<div />', {
-					                width: size - 1,
-					                height: size - 1
-					            }).appendTo(parent);
-					        }
-					    }
-					}
-					// createGrid(25);
-				</script>
+				<div class="grid">
 				<script >
 					function createTable(tableData) {
 					  var table = document.createElement('table');
+					  table.className = "table table-bordered";
 					  var tableBody = document.createElement('tbody');
 
 					  tableData.forEach(function(rowData) {
@@ -60,6 +40,11 @@
 
 					    rowData.forEach(function(cellData) {
 					      var cell = document.createElement('td');
+					      if (cellData == 0) {
+					      	cell.className = "empty";
+					      }else{
+					      	cell.className = "filled";
+					      };
 					      cell.appendChild(document.createTextNode(cellData));
 					      row.appendChild(cell);
 					    });
@@ -70,18 +55,208 @@
 					  table.appendChild(tableBody);
 					  document.body.appendChild(table);
 					}
+					
+					
+				</script>
+				<script>
+				$(document).ready(function() {
+
 					var initialState = [
 								[0,1,0],
 								[0,1,0],
 								[0,1,0]
 							];
-					createTable(initialState);
 
-					var grid = new Grid();
+					var liveCells = [];
+					var grid = [];
+					var newGrid = [];
+					var gridSize = 3;
 
-					// grid.setState(initialState);
-					grid.draw(6);
+					function drawGrid(size)
+					{
+						gridSize = size;
+
+						for ( var x = 0; x < gridSize; x++)
+						{
+							grid[x] = [];
+
+							for (var y = 0; y < gridSize; y++)
+							{
+								var rand = Math.floor(Math.random() * 4) + 1;
+								if (rand > 2)
+								{
+									grid[x][y] = 0
+								}
+								else
+								{
+									grid[x][y] = 1
+									liveCells.push([x,y]);
+								};
+							};
+						}
+					}
+
+					function updateGrid() {
+
+						// Copy grid without references:
+						
+						for (var i = 0; i < grid.length; i++)
+						    newGrid[i] = grid[i].slice();
+						 
+						// if (liveCells.length > 2) {
+						// 	updateAllCellStates(true);
+						// }
+						// else {
+						// 	updateLiveCellsOnly();
+						// }
+
+						//Update the current state of all cells
+						updateAllCellStates(false);
+
+						for (var k = 0; k < newGrid.length; k++)
+						    grid[k] = newGrid[k].slice();
+
+						// grid = newGrid.slice(0);
+
+						console.log("New State:");
+					}
+
+					function updateAllCellStates(state) {
+
+						for ( var x = 0; x < gridSize; x++)
+						{
+							for (var y = 0; y < gridSize; y++)
+							{
+									updateCellState(x,y);
+								// if (state == true) {
+								// }else{
+								// 	grid[x][y].updateCurrentState();
+								// };
+							};
+						}
+					}
+
+					function updateCellState(x,y) {
+
+						var cell = newGrid[x][y];
+
+						var liveNeighbours = checkNeighbours(x,y);
+						
+						if (newGrid[x][y] == 0)
+						{
+							if ( liveNeighbours == 3 )
+							{
+								newGrid[x][y] = 1;
+							}
+							else
+							{
+								newGrid[x][y] = 0;
+							}
+
+						}
+						else
+						{
+							if ( liveNeighbours < 2 || liveNeighbours > 3)
+							{
+								newGrid[x][y] = 0;
+							}
+							else
+							{
+								newGrid[x][y] = 1;
+							}
+						}
+
+						console.log("Cell: "+x+","+y+" OState "+grid[x][y]+" Neighbours: "+liveNeighbours+" State "+newGrid[x][y]+"\n" );
+					}
+
+					function findLiveCells() {
+
+						for ( var x = 0; x < gridSize; x++)
+						{
+							for (var y = 0; y < gridSize; y++)
+							{
+								var cell = grid[x][y];
+								if (cell == 1)
+								{
+									liveCells.push([x,y]);
+								};
+							};
+						}
+					}
+
+					 function checkNeighbours(x,y) {
+
+						var liveNeighbours = 0;
+
+						liveNeighbours = liveNeighbours + getCellState(x-1,y-1);
+						liveNeighbours = liveNeighbours + getCellState(x-1,y);
+						liveNeighbours = liveNeighbours + getCellState(x-1,y+1);
+
+						liveNeighbours = liveNeighbours + getCellState(x,y-1);
+						liveNeighbours = liveNeighbours + getCellState(x,y+1);
+
+						liveNeighbours = liveNeighbours + getCellState(x+1,y-1);
+						liveNeighbours = liveNeighbours + getCellState(x+1,y);
+						liveNeighbours = liveNeighbours + getCellState(x+1,y+1);
+						// console.log("Cell: "+x+","+y+" Neighbours: "+liveNeighbours+"\n" );
+						return liveNeighbours;
+					}
+
+					function getCellState(x,y) {
+
+						if (x >= 0 && y >= 0) {
+
+							if (x < gridSize && y < gridSize) {
+
+								// console.log(x+","+y+" = "+grid[x][y])
+								return grid[x][y];
+							};
+						};
+
+						return 0;
+					}
+
+					function updateLiveCellsOnly() {
+
+						for (var i = 0; i < liveCells.length; i++) {
+							var x = liveCells[i][0];
+							var y = liveCells[i][1];
+							// console.log(x+","+y)
+							updateCellState(x,y);
+						};
+					}
+
+					function printGrid(grid) {
+
+						for (var x = 0; x < grid.length; x++) {
+							
+							var row = [];
+
+							for (var y = 0; y < grid.length; y++) {
+							
+								row.push(grid[x][y]);
+							
+							};
+
+							console.log(row);
+						};
+					}
+
+					drawGrid(6);
+					// grid = initialState;
+					// createTable(grid);
+					
+					// console.log(newGrid);
+					// printGrid(grid);
+					for (var i = 0; i < 5; i++) {
+						printGrid(grid);
+						updateGrid();
+						createTable(grid);
+					}
+
+				})
 				</script>
+				</div>
 			</div>
 		</div>
 	</div>

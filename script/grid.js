@@ -9,7 +9,7 @@ module.exports = function Grid(){
 	/**
 	 * Draws grid
 	 */
-	this.draw = function(gridSize)
+	draw = function(gridSize)
 	{
 		this.gridSize = gridSize;
 
@@ -38,7 +38,7 @@ module.exports = function Grid(){
 	/**
 	 * Sets grid state
 	 */
-	this.setState = function(gridState)
+	setState = function(gridState)
 	{
 		for (var x = 0; x < gridState.length; x++) {
 			for (var y = 0; y < gridState.length; y++) {
@@ -56,7 +56,7 @@ module.exports = function Grid(){
 	/**
 	 * Returns grid in integer format
 	 */
-	this.getGrid = function() {
+	getGrid = function() {
 		var plainGrid = [];
 
 		for (var x = 0; x < this.grid.length; x++) {
@@ -77,7 +77,7 @@ module.exports = function Grid(){
 	/**
 	 * Updates the state of the grid
 	 */
-	this.update = function() {
+	update = function() {
 		if (this.liveCells.length > 2) {
 			this.updateAllCellStates(true);
 		}
@@ -94,7 +94,7 @@ module.exports = function Grid(){
 	/**
 	 * Update all cells in this grid
 	 */
-	this.updateAllCellStates = function(state){
+	updateAllCellStates = function(state) {
 
 		for ( var x = 0; x < this.gridSize; x++)
 		{
@@ -112,7 +112,7 @@ module.exports = function Grid(){
 	/**
 	 * Only update the live cells
 	 */
-	this.updateLiveCellsOnly = function() {
+	updateLiveCellsOnly = function() {
 
 		for (var i = 0; i < this.liveCells.length; i++) {
 			var x = this.liveCells[i][0];
@@ -125,7 +125,7 @@ module.exports = function Grid(){
 	/**
 	 * Updates cell state
 	 */
-	this.updateCellState = function(x,y) {
+	updateCellState = function(x,y) {
 
 		var cell = this.grid[x][y];
 
@@ -138,7 +138,7 @@ module.exports = function Grid(){
 	 * Finds for all the live cells on the grid
 	 * @return {int} number of live cells on grid
 	 */
-	this.findLiveCells = function() {
+	findLiveCells = function() {
 
 		for ( var x = 0; x < this.gridSize; x++)
 		{
@@ -157,7 +157,7 @@ module.exports = function Grid(){
 	 * Checks if surrounding cells are alive
 	 * @return {int}   number of cells alive around this cell
 	 */
-	this.checkNeighbours = function(x,y) {
+	checkNeighbours = function(x,y) {
 
 		var liveNeighbours = 0;
 
@@ -179,7 +179,7 @@ module.exports = function Grid(){
 	 * Gets state of specified cell
 	 * @return {int}   [State of specified cell]
 	 */
-	this.getCellState = function(x,y) {
+	getCellState = function(x,y) {
 
 		if (x >= 0 && y >= 0) {
 
@@ -196,7 +196,7 @@ module.exports = function Grid(){
 	/**
 	 * Prints each line of the grid
 	 */
-	this.print = function() {
+	print = function() {
 
 		for (var x = 0; x < this.grid.length; x++) {
 			

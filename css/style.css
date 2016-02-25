@@ -1,10 +1,17 @@
-.grid {
-    border: 1px solid #ccc;
-    border-width: 1px 0 0 1px;
+table {
+	table-layout: fixed;
+	width: inherit !important;
 }
 
-.grid div {
-    border: 1px solid #ccc;
-    border-width: 0 1px 1px 0;
-    float: left;
+.empty {
+	background-color: grey !important;
+}
+
+.filled {
+	background-color: black !important;
+}
+
+td {
+	width: 20px !important;
+	height: 20px !important;
 }
