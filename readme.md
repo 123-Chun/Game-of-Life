@@ -1,3 +1,13 @@
 #Game of Life
 
-Trying the Game of Life challenge
+By Chun
+
+## Running Tests ##
+### In node ###
+```npm test```
+
+Or run:
+
+```npm run-script webpack-test```
+
+and open `_SpecRunner.html`

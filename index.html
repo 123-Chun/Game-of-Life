@@ -8,10 +8,9 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script src="js/jquery-2.2.1.min.js"></script>
-	<script src="js/bundle.js"></script>
 </head>
 <body>
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-10 col-sm-offset-1">
 				<h1>Hello World</h1>
@@ -19,298 +18,58 @@
 				<p>By Chun</p>
 				<ul>
 					<li>
-						<a href="_specRunner.html">_specRunner</a>
+						<a href="_specRunner.html" target="_blank">_specRunner</a>
 					</li>
 				</ul>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-11">
-				<div class="grid" id="grid"></div>
-			</div>
-			<div class="col-sm-1">
-				<ul>
-					<li><a href="#" id="update" class="btn btn-primary">Update</a></li>
-					<li><a href="#" id="reset" class="btn btn-primary">Reset</a></li>
-					<li><a href="#" id="play" class="btn btn-primary">Play</a></li>
-					<li><a href="#" id="stop" class="btn btn-primary">Stop</a></li>
-				</ul>
-			</div>
+			<div class="grid" id="grid"></div>
+			<ul>
+				<li><a href="#" id="update" class="btn btn-primary">Update</a></li>
+				<li><a href="#" id="reset" class="btn btn-warning">Reset</a></li>
+				<li><a href="#" id="play" class="btn btn-success">Play</a></li>
+			</ul>
 		</div>
+	</div>
 		
-		<script >
-		$(document).ready(function() {
-			
-			var gridDiv = document.getElementById('grid');
-			var initialState = [
-						[0,1,0],
-						[0,1,0],
-						[0,1,0]
-					];
+	<script >
+		$( document ).ready(function() {
+			init();
+		});
+		
+		var initialState = [
+				[0,1,0],
+				[0,1,0],
+				[0,1,0]
+			];
 
-			var liveCells = [];
-			var grid = [];
-			var newGrid = [];
-			var gridSize = 3;
-			var htmlGrid = [];
-			var gridPlay = 0;
-			var iteration = 0;
-
-			drawGrid(20);
+		function init () {
 
 			// grid = initialState;
+			drawGrid(20);
 			createTable(grid,true);
+		};
 
-			$('a#reset').click(function reset() {
-				drawGrid(20);
-				createTable(grid,false);
+		$('a#play').click(function(){
+			for (var i = 0; i < 20; i++) {
+				setTimeout(function(){
+					updateGrid();
+					createTable(grid,false);
+				}, 150 * i);
+			};
+		});
 
-			});
-			// console.log(newGrid);
-			// printGrid(grid);
-			// for (var i = 0; i < 5; i++) {
-			// 	printGrid(grid);
-			// 	updateGrid();
-			// 	createTable(grid);
-			// }
-			
-			function createTable(tableData,create) {
-			  var table = document.createElement('table');
-			  table.className = "table table-bordered";
-			  var tableBody = document.createElement('tbody');
+		$('a#reset').click(function reset() {
+			drawGrid(20);
+			createTable(grid,false);
+		});
 
-			  tableData.forEach(function(rowData) {
-			    var row = document.createElement('tr');
-
-			    rowData.forEach(function(cellData) {
-			      var cell = document.createElement('td');
-			      var cellDiv = document.createElement('div');
-			      if (cellData == 0) {
-			      	cellDiv.className = "empty";
-			      }else{
-			      	cellDiv.className = "filled";
-			      };
-			      cellDiv.appendChild(document.createTextNode(cellData));
-			      cell.appendChild(cellDiv);
-			      row.appendChild(cell);
-			    });
-
-			    tableBody.appendChild(row);
-			  });
-
-			  table.appendChild(tableBody);
-			  if (create == true) {
-
-				gridDiv.appendChild(table);
-			  }else {
-
-			  	$("table.table").replaceWith(table);
-			  	// gridDiv.appendChild(table);
-			  }
-			}
-
-			$('a#update').click(function update() {
-				// printGrid(grid);
-				updateGrid();
-				createTable(grid,false);
-			});
-
-			$('a#play').click(function play() {
-				gridPlay += 20;
-				console.log(gridPlay);
-
-				while (iteration < gridPlay) {
-					iteration = iteration + 1;
-					setTimeout(function(){
-						console.log("Iteration"+iteration)
-						updateGrid();
-						createTable(grid,false);
-					}, 250 * iteration);
-						// body...
-					// printGrid(grid);
-				}
-
-			});
-
-			$('a#stop').click(function stop() {
-				gridPlay = 0;
-				console.log(gridPlay);
-			});
-
-
-			function drawGrid(size)
-			{
-				gridSize = size;
-
-				for ( var x = 0; x < gridSize; x++)
-				{
-					grid[x] = [];
-
-					for (var y = 0; y < gridSize; y++)
-					{
-						var rand = Math.floor(Math.random() * 4) + 1;
-						if (rand > 2)
-						{
-							grid[x][y] = 0
-						}
-						else
-						{
-							grid[x][y] = 1
-							liveCells.push([x,y]);
-						};
-					};
-				}
-			}
-
-			function updateGrid() {
-
-				// Copy grid without references:
-				
-				for (var i = 0; i < grid.length; i++)
-				    newGrid[i] = grid[i].slice();
-				 
-				// if (liveCells.length > 2) {
-				// 	updateAllCellStates(true);
-				// }
-				// else {
-				// 	updateLiveCellsOnly();
-				// }
-
-				//Update the current state of all cells
-				updateAllCellStates(false);
-
-				for (var k = 0; k < newGrid.length; k++)
-				    grid[k] = newGrid[k].slice();
-
-				// grid = newGrid.slice(0);
-
-				console.log("New State:");
-			}
-
-			function updateAllCellStates(state) {
-
-				for ( var x = 0; x < gridSize; x++)
-				{
-					for (var y = 0; y < gridSize; y++)
-					{
-							updateCellState(x,y);
-						// if (state == true) {
-						// }else{
-						// 	grid[x][y].updateCurrentState();
-						// };
-					};
-				}
-			}
-
-			function updateCellState(x,y) {
-
-				var cell = newGrid[x][y];
-
-				var liveNeighbours = checkNeighbours(x,y);
-				
-				if (newGrid[x][y] == 0)
-				{
-					if ( liveNeighbours == 3 )
-					{
-						newGrid[x][y] = 1;
-					}
-					else
-					{
-						newGrid[x][y] = 0;
-					}
-
-				}
-				else
-				{
-					if ( liveNeighbours < 2 || liveNeighbours > 3)
-					{
-						newGrid[x][y] = 0;
-					}
-					else
-					{
-						newGrid[x][y] = 1;
-					}
-				}
-
-				// console.log("Cell: "+x+","+y+" OState "+grid[x][y]+" Neighbours: "+liveNeighbours+" State "+newGrid[x][y]+"\n" );
-			}
-
-			function findLiveCells() {
-
-				for ( var x = 0; x < gridSize; x++)
-				{
-					for (var y = 0; y < gridSize; y++)
-					{
-						var cell = grid[x][y];
-						if (cell == 1)
-						{
-							liveCells.push([x,y]);
-						};
-					};
-				}
-			}
-
-			 function checkNeighbours(x,y) {
-
-				var liveNeighbours = 0;
-
-				liveNeighbours = liveNeighbours + getCellState(x-1,y-1);
-				liveNeighbours = liveNeighbours + getCellState(x-1,y);
-				liveNeighbours = liveNeighbours + getCellState(x-1,y+1);
-
-				liveNeighbours = liveNeighbours + getCellState(x,y-1);
-				liveNeighbours = liveNeighbours + getCellState(x,y+1);
-
-				liveNeighbours = liveNeighbours + getCellState(x+1,y-1);
-				liveNeighbours = liveNeighbours + getCellState(x+1,y);
-				liveNeighbours = liveNeighbours + getCellState(x+1,y+1);
-				// console.log("Cell: "+x+","+y+" Neighbours: "+liveNeighbours+"\n" );
-				return liveNeighbours;
-			}
-
-			function getCellState(x,y) {
-
-				if (x >= 0 && y >= 0) {
-
-					if (x < gridSize && y < gridSize) {
-
-						// console.log(x+","+y+" = "+grid[x][y])
-						return grid[x][y];
-					};
-				};
-
-				return 0;
-			}
-
-			function updateLiveCellsOnly() {
-
-				for (var i = 0; i < liveCells.length; i++) {
-					var x = liveCells[i][0];
-					var y = liveCells[i][1];
-					// console.log(x+","+y)
-					updateCellState(x,y);
-				};
-			}
-
-			function printGrid(grid) {
-
-				for (var x = 0; x < grid.length; x++) {
-					
-					var row = [];
-
-					for (var y = 0; y < grid.length; y++) {
-					
-						row.push(grid[x][y]);
-					
-					};
-
-					console.log(row);
-				};
-			}
-
-
-		})
-		</script>
-	</div>
+		$('a#update').click(function update() {
+			updateGrid();
+			createTable(grid,false);
+		});
+	</script>
+	<script src="js/grid.js"></script>
 </body>
 </html>

@@ -9,7 +9,7 @@ module.exports = function Grid(){
 	/**
 	 * Draws grid
 	 */
-	draw = function(gridSize)
+	this.draw = function(gridSize)
 	{
 		this.gridSize = gridSize;
 
@@ -19,6 +19,7 @@ module.exports = function Grid(){
 
 			for (var y = 0; y < this.gridSize; y++)
 			{
+				// Random alive cells generation
 				var rand = Math.floor(Math.random() * 4) + 1;
 				if (rand > 2)
 				{
@@ -38,7 +39,7 @@ module.exports = function Grid(){
 	/**
 	 * Sets grid state
 	 */
-	setState = function(gridState)
+	this.setState = function(gridState)
 	{
 		for (var x = 0; x < gridState.length; x++) {
 			for (var y = 0; y < gridState.length; y++) {
@@ -56,7 +57,7 @@ module.exports = function Grid(){
 	/**
 	 * Returns grid in integer format
 	 */
-	getGrid = function() {
+	this.getGrid = function() {
 		var plainGrid = [];
 
 		for (var x = 0; x < this.grid.length; x++) {
@@ -77,7 +78,9 @@ module.exports = function Grid(){
 	/**
 	 * Updates the state of the grid
 	 */
-	update = function() {
+	this.update = function() {
+
+		// 
 		if (this.liveCells.length > 2) {
 			this.updateAllCellStates(true);
 		}
@@ -85,7 +88,7 @@ module.exports = function Grid(){
 			this.updateLiveCellsOnly();
 		}
 
-		//Update the current state of all cells
+		// Update the current state of all cells
 		this.updateAllCellStates(false);
 
 		console.log("New State:");
@@ -94,7 +97,7 @@ module.exports = function Grid(){
 	/**
 	 * Update all cells in this grid
 	 */
-	updateAllCellStates = function(state) {
+	this.updateAllCellStates = function(state) {
 
 		for ( var x = 0; x < this.gridSize; x++)
 		{
@@ -112,12 +115,11 @@ module.exports = function Grid(){
 	/**
 	 * Only update the live cells
 	 */
-	updateLiveCellsOnly = function() {
+	this.updateLiveCellsOnly = function() {
 
 		for (var i = 0; i < this.liveCells.length; i++) {
 			var x = this.liveCells[i][0];
 			var y = this.liveCells[i][1];
-			// console.log(x+","+y)
 			this.updateCellState(x,y);
 		};
 	}
@@ -125,20 +127,19 @@ module.exports = function Grid(){
 	/**
 	 * Updates cell state
 	 */
-	updateCellState = function(x,y) {
+	this.updateCellState = function(x,y) {
 
 		var cell = this.grid[x][y];
 
 		var liveNeighbours = this.checkNeighbours(x,y);
 		cell.updateNewState(liveNeighbours);
-		// console.log(cell.getNewState());
 	}
 
 	/**
 	 * Finds for all the live cells on the grid
 	 * @return {int} number of live cells on grid
 	 */
-	findLiveCells = function() {
+	this.findLiveCells = function() {
 
 		for ( var x = 0; x < this.gridSize; x++)
 		{
@@ -157,7 +158,7 @@ module.exports = function Grid(){
 	 * Checks if surrounding cells are alive
 	 * @return {int}   number of cells alive around this cell
 	 */
-	checkNeighbours = function(x,y) {
+	this.checkNeighbours = function(x,y) {
 
 		var liveNeighbours = 0;
 
@@ -171,7 +172,7 @@ module.exports = function Grid(){
 		liveNeighbours = liveNeighbours + this.getCellState(x+1,y-1);
 		liveNeighbours = liveNeighbours + this.getCellState(x+1,y);
 		liveNeighbours = liveNeighbours + this.getCellState(x+1,y+1);
-		// console.log("Cell: "+x+","+y+" Neigh: "+liveNeighbours+"\n" );
+
 		return liveNeighbours;
 	}
 
@@ -179,13 +180,12 @@ module.exports = function Grid(){
 	 * Gets state of specified cell
 	 * @return {int}   [State of specified cell]
 	 */
-	getCellState = function(x,y) {
+	this.getCellState = function(x,y) {
 
 		if (x >= 0 && y >= 0) {
 
 			if (x < this.gridSize && y < this.gridSize) {
 
-				// console.log(x+","+y+" = "+this.grid[x][y].currentState)
 				return this.grid[x][y].getState();
 			};
 		};
@@ -196,7 +196,7 @@ module.exports = function Grid(){
 	/**
 	 * Prints each line of the grid
 	 */
-	print = function() {
+	this.print = function() {
 
 		for (var x = 0; x < this.grid.length; x++) {
 			

@@ -11,10 +11,27 @@ table {
 .filled {
 	background-color: black !important;
 }
+
 td {
 	padding: 0 !important;
 }
+
 td div {
 	width: 20px !important;
 	height: 20px !important;
+}
+
+#grid {
+	margin-left: 20px;
+	display: inline-block;
+	float: left;
+}
+
+ul {
+	float: left;
+	padding-left: 20px;
+	list-style: none;
+}
+ul li {
+	margin-top: 10px;
 }
