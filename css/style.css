@@ -1,6 +1,7 @@
 table {
 	table-layout: fixed;
 	width: inherit !important;
+	max-width: inherit !important;
 }
 
 .empty {
@@ -10,8 +11,10 @@ table {
 .filled {
 	background-color: black !important;
 }
-
 td {
+	padding: 0 !important;
+}
+td div {
 	width: 20px !important;
 	height: 20px !important;
 }
