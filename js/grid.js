@@ -1,14 +1,9 @@
 var gridDiv = document.getElementById('grid');
 
-var liveCells = [];
 var grid = [];
 var newGrid = [];
-var gridSize = 3;
 
-var gridPlay = 0;
-var iteration = 0;
-
-function createTable(tableData,create) {
+function createTable(tableData, create) {
 
 	var table = document.createElement('table');
 	table.className = "table table-bordered";
@@ -60,14 +55,13 @@ function drawGrid(size)
 		for (var y = 0; y < gridSize; y++)
 		{
 			var rand = Math.floor(Math.random() * 4) + 1;
-			if (rand > 2)
+			if (rand > 1)
 			{
 				grid[x][y] = 0;
 			}
 			else
 			{
 				grid[x][y] = 1
-				liveCells.push([x,y]);
 			};
 		};
 	}
@@ -76,17 +70,17 @@ function drawGrid(size)
 function updateGrid() {
 
 	// Copy grid without references:
-	for (var i = 0; i < grid.length; i++)
-			newGrid[i] = grid[i].slice();
+	for (var i = 0; i < grid.length; i++) {
+		newGrid[i] = grid[i].slice();
+	}
 
 	//Update the current state of all cells
 	updateAllCellStates();
 
 	// Copy grid without references:
-	for (var k = 0; k < newGrid.length; k++)
-			grid[k] = newGrid[k].slice();
-
-	console.log("New State:");
+	for (var k = 0; k < newGrid.length; k++) {
+		grid[k] = newGrid[k].slice();
+	}
 }
 
 function updateAllCellStates() {
@@ -98,6 +92,7 @@ function updateAllCellStates() {
 			updateCellState(x,y);
 		};
 	}
+	console.log("---- Cells Updated ----");
 }
 
 function updateCellState(x,y) {
@@ -128,25 +123,10 @@ function updateCellState(x,y) {
 			newGrid[x][y] = 1;
 		}
 	}
-	// console.log("Cell: "+x+","+y+" OState "+grid[x][y]+" Neighbours: "+liveNeighbours+" State "+newGrid[x][y]+"\n" );
+	// console.log("Cell: "+x+","+y+" Old State: "+grid[x][y]+" Neighbours: "+liveNeighbours+" State: "+newGrid[x][y]+"\n" );
 }
 
-function findLiveCells() {
-
-	for ( var x = 0; x < gridSize; x++)
-	{
-		for (var y = 0; y < gridSize; y++)
-		{
-			var cell = grid[x][y];
-			if (cell == 1)
-			{
-					liveCells.push([x,y]);
-			};
-		};
-	}
-}
-
- function checkNeighbours(x,y) {
+function checkNeighbours(x,y) {
 
 	var liveNeighbours = 0;
 
@@ -175,16 +155,6 @@ function getCellState(x,y) {
 	};
 
 	return 0;
-}
-
-function updateLiveCellsOnly() {
-
-	for (var i = 0; i < liveCells.length; i++) {
-		var x = liveCells[i][0];
-		var y = liveCells[i][1];
-		
-		updateCellState(x,y);
-	};
 }
 
 function printGrid(grid) {

@@ -80,7 +80,6 @@ module.exports = function Grid(){
 	 */
 	this.update = function() {
 
-		// 
 		if (this.liveCells.length > 2) {
 			this.updateAllCellStates(true);
 		}
@@ -133,6 +132,7 @@ module.exports = function Grid(){
 
 		var liveNeighbours = this.checkNeighbours(x,y);
 		cell.updateNewState(liveNeighbours);
+		console.log("\n Cell: "+x+","+y+" Old State: "+cell.getState()+" Neighbours: "+liveNeighbours+" State: "+cell.getNewState());
 	}
 
 	/**

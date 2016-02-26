@@ -37,17 +37,21 @@
 		$( document ).ready(function() {
 			init();
 		});
-		
+
+		var gridSize = 15;
+
 		var initialState = [
-				[0,1,0],
-				[0,1,0],
-				[0,1,0]
+				[0,0,0,1,0],
+				[0,0,0,1,1],
+				[0,0,0,0,0],
+				[0,1,0,0,0],
+				[0,0,0,0,1]
 			];
 
 		function init () {
 
 			// grid = initialState;
-			drawGrid(20);
+			drawGrid(gridSize);
 			createTable(grid,true);
 		};
 
@@ -56,13 +60,14 @@
 				setTimeout(function(){
 					updateGrid();
 					createTable(grid,false);
-				}, 150 * i);
+				}, 200 * i);
 			};
 		});
 
 		$('a#reset').click(function reset() {
-			drawGrid(20);
+			drawGrid(gridSize);
 			createTable(grid,false);
+			console.clear();
 		});
 
 		$('a#update').click(function update() {

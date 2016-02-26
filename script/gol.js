@@ -9,7 +9,7 @@ var initialState = [
 var grid = new Grid();
 
 // grid.setState(initialState);
-grid.draw(6);
+grid.draw(5);
 
 for (var i = 0; i < 5; i++) {
 	grid.print();
